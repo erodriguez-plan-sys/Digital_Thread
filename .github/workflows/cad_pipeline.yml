@@ -1,0 +1,50 @@
+name: CAD Pipeline
+
+on:
+  push:
+    paths:
+      - "*.STEP"  # Trigger on any changes to STEP files
+
+jobs:
+  validate-step-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Validate STEP File
+        run: |
+          echo "Validating cdp_latest.STEP..."
+          # Mock validation logic (replace with actual validation script)
+          if [ ! -f cdp_latest.STEP ]; then
+            echo "STEP file not found!"
+            exit 1
+          fi
+          echo "Validation successful for cdp_latest.STEP."
+
+  convert-step-to-gltf:
+    needs: validate-step-file
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Convert STEP to GLTF
+        run: |
+          echo "Converting cdp_latest.STEP to cdp_latest.gltf..."
+          # Mock conversion logic (replace with actual conversion command)
+          cp cdp_latest.STEP cdp_latest.gltf  # Simulating conversion
+
+  deploy-converted-model:
+    needs: convert-step-to-gltf
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Deploy Converted GLTF Model
+        run: |
+          echo "Deploying cdp_latest.gltf to server..."
+          # Mock deployment logic (replace with actual deployment command)
+          echo "Deployment successful! (mock)"
+
