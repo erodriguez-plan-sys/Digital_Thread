@@ -38,17 +38,17 @@ jobs:
         echo "📂 Directory listing before running FreeCAD:"
         ls -la
 
-    - name: Setup FreeCAD with Miniconda
+    - name: Setup Miniconda
       uses: conda-incubator/setup-miniconda@v2
       with:
+        auto-update-conda: true
+        python-version: 3.11
         activate-environment: base
-        environment-file: environment.yml
-        auto-activate-base: true
 
-    - name: Install FreeCAD
+    - name: Install FreeCAD via Conda
       run: |
-        sudo apt-get update
-        sudo apt-get install -y freecad freecad-common
+        conda install -c conda-forge freecad
+        conda install -c conda-forge python=3.11  # Ensure correct Python version
 
     - name: Run geometry check
       run: |
