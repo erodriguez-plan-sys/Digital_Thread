@@ -25,26 +25,35 @@ jobs:
           fi
           echo "Validation successful for cdp_latest.STEP."
 
-
-  check-geometry:
+  validate-geometry:
+    needs: validate-step-file
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+    - name: Checkout repo
+      uses: actions/checkout@v3
 
-      - name: Set up Conda with Python 3.11
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          python-version: 3.11
-          activate-environment: freecad-env
-          environment-file: environment.yml
-          auto-activate-base: false
+    - name: Check directory contents
+      run: |
+        echo "📂 Directory listing before running FreeCAD:"
+        ls -la
 
-      - name: Run geometry check
-        shell: bash -l {0}
-        run: |
-          freecadcmd geometry_check.py
+    - name: Setup FreeCAD with Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: base
+        environment-file: environment.yml
+        auto-activate-base: true
+
+    - name: Install FreeCAD
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y freecad freecad-common
+
+    - name: Run geometry check
+      run: |
+        echo "▶️ Running geometry_check.py..."
+        freecadcmd geometry_check.py
 
 
   convert-step-to-gltf:
