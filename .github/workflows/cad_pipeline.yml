@@ -30,18 +30,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Install FreeCAD CLI and Python tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y freecad freecad-python3
+      - name: Set up Conda with Python 3.11
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          python-version: 3.11
+          activate-environment: freecad-env
+          environment-file: environment.yml
+          auto-activate-base: false
 
       - name: Run geometry check
+        shell: bash -l {0}
         run: |
           freecadcmd geometry_check.py
-
 
 
   convert-step-to-gltf:

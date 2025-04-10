@@ -1,0 +1,7 @@
+# environment.yml
+name: freecad-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - freecad
