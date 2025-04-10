@@ -1,30 +1,26 @@
-# geometry_check.py
-
-import Part
-import Import
-
-doc = App.newDocument()
+import sys
 
 try:
-    Import.open("cdp_latest.STEP")
-    solids = []
-    for obj in doc.Objects:
-        if hasattr(obj, "Shape") and obj.Shape.Solids:
-            solids.extend(obj.Shape.Solids)
+    import FreeCAD
+    import Part
 
-    total_faces = sum(len(s.Faces) for s in solids)
-    total_shells = sum(len(s.Shells) for s in solids)
+    doc = FreeCAD.newDocument()
+    shape = Part.read("cdp_latest.STEP")
+    
+    solids = shape.Solids
+    faces = shape.Faces
+    shells = shape.Shells
 
-    print(f"📦 Geometry Details:")
-    print(f"  Solids: {len(solids)}")
-    print(f"  Faces: {total_faces}")
-    print(f"  Shells: {total_shells}")
+    print(f"📦 Geometry Details:\n  Solids: {len(solids)}\n  Faces: {len(faces)}\n  Shells: {len(shells)}")
 
-    if not solids or any(s.isNull() or not s.isValid() for s in solids):
+    if not shape.isValid():
         print("❌ Geometry is invalid or has topology issues")
-        exit(1)
+        sys.exit(1)
     else:
         print("✅ Geometry is valid")
+        sys.exit(0)
+
 except Exception as e:
-    print(f"❌ Error parsing STEP file: {e}")
-    exit(1)
+    print(f"🔥 Exception during geometry check: {e}")
+    sys.exit(1)
+
