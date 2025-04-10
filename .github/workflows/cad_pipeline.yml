@@ -26,6 +26,7 @@ jobs:
           echo "Validation successful for cdp_latest.STEP."
 
   check-geometry:
+    needs: validate-step-file
     runs-on: ubuntu-latest
 
     steps:
@@ -52,7 +53,7 @@ jobs:
 
 
   convert-step-to-gltf:
-    needs: validate-step-file
+    needs: check-geometry
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
