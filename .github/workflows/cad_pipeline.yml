@@ -4,6 +4,9 @@ on:
   push:
     paths:
       - "*.STEP"  # Trigger on any changes to STEP files
+      - 'geometry_check.py'
+      - '.github/workflows/**'
+
 
 jobs:
   validate-step-file:
@@ -21,6 +24,25 @@ jobs:
             exit 1
           fi
           echo "Validation successful for cdp_latest.STEP."
+
+
+  check-geometry:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install FreeCAD CLI and Python tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y freecad freecad-python3
+
+      - name: Run geometry check
+        run: |
+          freecadcmd geometry_check.py
+
+
 
   convert-step-to-gltf:
     needs: validate-step-file
